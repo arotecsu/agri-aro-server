@@ -1,12 +1,14 @@
-const { Timestamp } = require("firebase-admin/firestore");
-const { verifyDevice, saveDataOfDevice, getUserData, getDevicesOfUser, hasUserById, getSensData } = require("../firebase");
-const { verifyToken } = require("../jwt");
-const { sockets } = require("../socket");
-const { getTokenHeader } = require("../auth");
-const { verifySensParms } = require("../services/alerts");
+import { Request, Response } from "express";
+
+import { Timestamp } from  "firebase-admin/firestore";
+import { verifyDevice, saveDataOfDevice hasUserById, getSensData } from "../firebase";
+import { verifyToken } from "../jwt";
+import { sockets } from "../socket";
+import { getTokenHeader } from "../auth";
+import { verifySensParms } from "../services/alerts";
 
 
-async function VerifyDeviceRoute(req, res) {
+async function VerifyDeviceRoute(req: Request, res: Response) {
 
     const { id } = req.params;
     const device = await verifyDevice(id);
@@ -28,7 +30,7 @@ async function VerifyDeviceRoute(req, res) {
 
 }
 
-async function DeviceSendDataRoute(req, res) {
+async function DeviceSendDataRoute(req: Request, res: Response) {
     const { T, UA, US, PH, NITROGENIO, POTASSIO, FOSFORO, DEVICE_ID } = req.body;
 
     console.log(req.body);
@@ -88,7 +90,7 @@ async function DeviceSendDataRoute(req, res) {
 
 }
 
-async function DeviceDataRoute(req, res) {
+async function DeviceDataRoute(req: Request, res: Response) {
 
     const token = getTokenHeader(req);
 
@@ -141,7 +143,7 @@ async function DeviceDataRoute(req, res) {
 }
 
 
-async function DataSensDeviceRoute(req, res) {
+async function DataSensDeviceRoute(req: Request, res: Response) {
     const {  min_date, max_date } = req.query;
     const token = getTokenHeader(req);    
 

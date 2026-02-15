@@ -1,8 +1,7 @@
 const { dateToString, getDateExtensive } = require("../utils");
 
 function generateReportEmail(nome, field_name, data) {
-
-    return `<!DOCTYPE html>
+  return `<!DOCTYPE html>
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
@@ -55,22 +54,21 @@ function generateReportEmail(nome, field_name, data) {
 </html>`;
 }
 
-
 function generateAlertEmail(nome, date, alertas) {
-    const [data, hora] = date.toLocaleString("pt").split(' ');
+  const [data, hora] = date.toLocaleString("pt").split(" ");
 
-    let alertasString = '';
+  let alertasString = "";
 
-    for (const alerta of alertas) {
-        alertasString += ` <p>
+  for (const alerta of alertas) {
+    alertasString += ` <p>
         <strong>${alerta.title}</strong> <br>
         <div class="ml-2">
             <p>- Atual: ${alerta.value} ${alerta.unit}</p>
             <p>- Ideal: ${alerta.interval.min}-${alerta.interval.max} ${alerta.unit}</p>
         </div>
     </p>`;
-    }
-    return `<!DOCTYPE html>
+  }
+  return `<!DOCTYPE html>
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
@@ -130,8 +128,4 @@ function generateAlertEmail(nome, date, alertas) {
 </body>
 </html>`;
 }
-
-module.exports = {
-    generateReportEmail,
-    generateAlertEmail
-}
+export { generateReportEmail, generateAlertEmail };

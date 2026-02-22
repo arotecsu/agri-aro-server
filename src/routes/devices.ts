@@ -2,8 +2,8 @@ import { Request, Response } from "express";
 
 import { Timestamp } from  "firebase-admin/firestore";
 import { verifyDevice, saveDataOfDevice hasUserById, getSensData } from "../firebase";
-import { verifyToken } from "../jwt";
-import { sockets } from "../socket";
+import { verifyToken } from "../auth/jwt";
+import { sockets } from "../services/socket";
 import { getTokenHeader } from "../auth";
 import { verifySensParms } from "../services/alerts";
 

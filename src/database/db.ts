@@ -1,11 +1,10 @@
 import mongoose from "mongoose";
-
-const DATABASE_URL = process.env.DATABASE_URL;
+import { envService } from "../config/env";
 
 export const connectDatabase = async () => {
   try {
-    await mongoose.connect(DATABASE_URL!);
-    return mongoose.connection;
+    await mongoose.connect(envService.get("DATABASE_URL")!);
+    console.log("Connected to MongoDB");
   } catch (error) {
     console.error("MongoDB connection error:", error);
     process.exit(1);
@@ -19,5 +18,3 @@ export const disconnectDatabase = async () => {
     console.error("MongoDB disconnection error:", error);
   }
 };
-
-export default mongoose;

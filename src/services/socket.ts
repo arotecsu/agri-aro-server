@@ -1,12 +1,17 @@
-//import { verifyDevice } from "./firebase";
 import type { Express } from "express";
 import { jwtService } from "../auth/jwt";
 import type { Server as HttpServer } from "node:http";
 import { Server, Socket } from "socket.io";
 import { Device } from "../database/models/device";
+import { Field } from "../database/models";
+
+type SocketInfo = {
+  socketId: string;
+  socket: Socket;
+};
 
 export class SocketService {
-  sockets: Record<string, Socket[]> = {};
+  sockets: Record<string, SocketInfo[]> = {};
 
   constructor(server: HttpServer, corsConfig: any) {
     const io = new Server(server, {
@@ -14,33 +19,54 @@ export class SocketService {
     });
 
     io.on("connection", async (socket) => {
-      const { token, deviceId } = socket.handshake.query;
+      const { token, fieldId }: { token: string; fieldId: string } =
+        socket.handshake.query;
 
-      socket.emit;
       if (!token) {
         socket.disconnect();
         return;
       }
 
-      const data = jwtService.verifyToken(token);
+      const jwtPayload = jwtService.verifyToken(token);
 
-      if (data == null) {
+      if (!jwtPayload) {
         socket.disconnect();
         return;
       }
 
-      const device = await Device.findById(deviceId);
+      const field = await Field.findById(fieldId);
 
-      if (device == null) {
+      if (!field || jwtPayload.userId !== field.userId.toString()) {
         socket.disconnect();
         return;
+      }
+
+      const device = await Device.findOne({ fieldId });
+
+      if (!device) {
+        socket.disconnect();
+        return;
+      }
+
+      if (device._id.toString() in this.sockets) {
+        this.sockets[device._id.toString()]?.push({
+          socket: socket,
+          socketId: socket.id,
+        });
+      } else {
+        this.sockets[device._id.toString()] = [
+          {
+            socket: socket,
+            socketId: socket.id,
+          },
+        ];
       }
 
       socket.on("disconnect", function () {
-        for (var _dev in this.sockets) {
-          if (deviceId == _dev) {
+        for (const _dev in this.sockets) {
+          if (device._id.toString() == _dev) {
             this.sockets[_dev] = this.sockets[_dev].filter((_socket) => {
-              if (_socket.id == socket.id) {
+              if (_socket.socketId == socket.id) {
                 return false;
               }
               return true;
@@ -48,21 +74,6 @@ export class SocketService {
           }
         }
       });
-      //adicionar os emits
-
-      if (deviceId in this.sockets) {
-        this.sockets[deviceId].push({
-          socket: socket,
-          id: socket.id,
-        });
-      } else {
-        this.sockets[deviceId] = [
-          {
-            socket: socket,
-            id: socket.id,
-          },
-        ];
-      }
     });
   }
 }

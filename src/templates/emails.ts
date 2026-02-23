@@ -1,6 +1,16 @@
-const { dateToString, getDateExtensive } = require("../utils");
+import { dateToString, getDateExtensive } from "../services/date";
 
-function generateReportEmail(nome, field_name, data) {
+type GenerateReportEmailParams = {
+  name: string;
+  fieldName: string;
+  date: Date;
+};
+
+function generateReportEmail({
+  name,
+  fieldName,
+  date,
+}: GenerateReportEmailParams) {
   return `<!DOCTYPE html>
 <html lang="pt">
 <head>
@@ -35,14 +45,14 @@ function generateReportEmail(nome, field_name, data) {
 
   <p><strong>Assunto:</strong> Relatório Disponível</p> 
 
-   <p> Olá ${nome},</p>
+   <p> Olá ${name},</p>
     
     <p>
-    Gostaríamos de informar que o relatório do campo ${field_name} referente ao dia ${getDateExtensive(data)} está agora disponível.
+    Gostaríamos de informar que o relatório do campo ${fieldName} referente ao dia ${getDateExtensive(date)} está agora disponível.
 </p> 
 <p>
     Para acessar o relatório, por favor, clique 
-    <a href="https://agriaro.arotec.ao/app/report?date=${dateToString(data)}"> Aqui</a>
+    <a href="https://agriaro.arotec.ao/app/report?date=${dateToString(date)}"> Aqui</a>
 </p>
 <p>
     Caso tenha alguma dúvida ou necessite de mais informações, estamos à disposição.
@@ -54,7 +64,21 @@ function generateReportEmail(nome, field_name, data) {
 </html>`;
 }
 
-function generateAlertEmail(nome, date, alertas) {
+type GenerateAlertEmailParams = {
+  name: string;
+  date: Date;
+  alertas: {
+    title: string;
+    value: number;
+    unit: string;
+    interval: {
+      min: number;
+      max: number;
+    };
+  }[];
+};
+
+function generateAlertEmail({ name, date, alertas }: GenerateAlertEmailParams) {
   const [data, hora] = date.toLocaleString("pt").split(" ");
 
   let alertasString = "";
@@ -105,7 +129,7 @@ function generateAlertEmail(nome, date, alertas) {
 
   <p><strong>Assunto:</strong> Alerta de Níveis Críticos </p> 
 
-   <p> Olá ${nome},</p>
+   <p> Olá ${name},</p>
     
     <p>
         Gostaríamos de informar que, em ${data} às ${hora}, o seu sistema AGRI-ARO detectou níveis críticos de:

@@ -3,11 +3,11 @@ import bodyParser from "body-parser";
 import cors from "cors";
 import { createServer } from "http";
 
-//import { initJob } from "./services/jobs";
 import { envService } from "./config/env";
 import { SocketService } from "./services/socket";
 import { loadRoutes } from "./routes";
 import { connectDatabase } from "./database/db";
+import { initJob } from "./services/jobs";
 
 const NODE_ENV = envService.get("NODE_ENV");
 const PORT = parseInt(envService.get("PORT"));
@@ -32,7 +32,7 @@ const server = createServer(app, {
 
 const socketService = new SocketService(server, corsConfig);
 
-//initJob();
+initJob();
 
 server.listen(PORT, async () => {
   console.log(`Server running in ${NODE_ENV} mode on port ${PORT}`);

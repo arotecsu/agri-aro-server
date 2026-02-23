@@ -3,6 +3,7 @@ import { fieldsController } from "../controllers/fields.controller";
 
 export const fieldsRouter = Router();
 
+fieldsRouter.get("/:fieldId/params", fieldsController.getParams);
 fieldsRouter.get("/", fieldsController.getAll);
 fieldsRouter.post("/", fieldsController.create);
 fieldsRouter.get("/:fieldId", fieldsController.getById);

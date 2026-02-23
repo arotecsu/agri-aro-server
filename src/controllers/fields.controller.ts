@@ -2,7 +2,7 @@ import type { Request, Response } from "express";
 import { User } from "../database/models/user";
 import type { AuthRequest } from "../middleware/auth.middleware";
 import { Device } from "../database/models/device";
-import { Field } from "../database/models";
+import { Field, SoilCrop } from "../database/models";
 class FieldsController {
   async getAll(req: AuthRequest, res: Response) {
     const { userId } = req;
@@ -173,6 +173,24 @@ class FieldsController {
 
     res.json({
       field: populated,
+    });
+  }
+
+  async getParams(req: AuthRequest, res: Response) {
+    const { fieldId } = req.params;
+
+    const field = await Field.findById(fieldId);
+    if (!field) return res.sendStatus(404);
+
+    const params = await SoilCrop.findOne({
+      cropType: field.cropType,
+      soilType: field.soilType,
+    });
+
+    if (!params) return res.sendStatus(404);
+
+    res.json({
+      params,
     });
   }
 }

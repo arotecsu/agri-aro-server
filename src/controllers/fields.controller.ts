@@ -32,12 +32,11 @@ class FieldsController {
       fieldName,
       deviceId,
       cropType,
+      position,
       soilType,
       address,
-      position,
       fieldSize,
     } = req.body;
-
     const user = await User.findById(userId);
     if (!user) return res.status(404);
 
@@ -46,8 +45,8 @@ class FieldsController {
       userId,
       cropType,
       soilType,
-      address,
       position,
+      address,
       fieldSize,
       associates: [],
     });

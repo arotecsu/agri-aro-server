@@ -19,7 +19,7 @@ const fieldSchema = new Schema(
       required: true,
     },
     fieldSize: { type: Number, required: true },
-    address: { type: String, required: true },
+    address: String,
     position: {
       latitude: { type: Number, required: true },
       longitude: { type: Number, required: true },

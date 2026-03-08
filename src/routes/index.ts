@@ -22,11 +22,4 @@ export function loadRoutes(app: Express) {
   app.use("/devices", authMiddleware.use, devicesRouter);
   app.use("/soils", soilsRouter);
   app.use("/crops", cropsRouter);
-
-  /*
-
-
-  app.get("/params/fields", authMiddleware, GetFieldsParamsRoute);
-
-  */
 }

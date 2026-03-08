@@ -5,6 +5,8 @@ import { profileRouter } from "./profile.route";
 import { authMiddleware } from "../middleware/auth.middleware";
 import { fieldsRouter } from "./fields.route";
 import { devicesRouter } from "./devices.route";
+import { soilsRouter } from "./soils.route";
+import { cropsRouter } from "./crops.route";
 
 export function loadRoutes(app: Express) {
   app.use(loggerMiddleware);
@@ -18,6 +20,8 @@ export function loadRoutes(app: Express) {
   app.use("/profile", authMiddleware.use, profileRouter);
   app.use("/fields", authMiddleware.use, fieldsRouter);
   app.use("/devices", authMiddleware.use, devicesRouter);
+  app.use("/soils", soilsRouter);
+  app.use("/crops", cropsRouter);
 
   /*
 

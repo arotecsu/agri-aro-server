@@ -1,4 +1,3 @@
-import type { Express } from "express";
 import { jwtService } from "../auth/jwt";
 import type { Server as HttpServer } from "node:http";
 import { Server, Socket } from "socket.io";
@@ -13,7 +12,7 @@ type SocketInfo = {
 export class SocketService {
   sockets: Record<string, SocketInfo[]> = {};
 
-  constructor(server: HttpServer, corsConfig: any) {
+  start(server: HttpServer, corsConfig: any) {
     const io = new Server(server, {
       cors: corsConfig,
     });
@@ -80,4 +79,15 @@ export class SocketService {
       });
     });
   }
+
+  emitToField(deviceId: string, event: string, data: any) {
+    const sts = this.sockets[deviceId];
+    if (sts) {
+      sts.forEach((st) => {
+        st.socket.emit(event, data);
+      });
+    }
+  }
 }
+
+export const socketService = new SocketService();

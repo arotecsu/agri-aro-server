@@ -27,11 +27,7 @@ export function loadRoutes(app: Express) {
     (req, res, next) => authMiddleware.use(req as any, res, next),
     fieldsRouter,
   );
-  app.use(
-    "/devices",
-    (req, res, next) => authMiddleware.use(req as any, res, next),
-    devicesRouter,
-  );
+  app.use("/devices", devicesRouter);
   app.use("/soils", soilsRouter);
   app.use("/crops", cropsRouter);
 }

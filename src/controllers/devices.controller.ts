@@ -2,6 +2,7 @@ import type { Request, Response } from "express";
 import type { AuthRequest } from "../middleware/auth.middleware";
 import { Device } from "../database/models/device";
 import { SensorReading } from "../database/models/sensor-reading";
+import { socketService } from "../services/socket";
 
 class DevicesController {
   get = async (req: AuthRequest, res: Response): Promise<void> => {
@@ -44,10 +45,10 @@ class DevicesController {
     res.json({ readings });
   };
 
-  sendData = async (req: AuthRequest, res: Response): Promise<void> => {
-    const deviceId = req.params.deviceId as string;
+  sendData = async (req: Request, res: Response): Promise<void> => {
+    const serieId = req.params.serieId as string;
 
-    const device = await Device.findOne({ serieId: deviceId });
+    const device = await Device.findOne({ serieId });
     if (!device) {
       res.sendStatus(404);
       return;
@@ -73,6 +74,20 @@ class DevicesController {
       ambientHumidity,
       soilMoisture,
     });
+
+    socketService.emitToField(
+      device._id.toString(),
+      "send_data",
+      JSON.stringify({
+        phosphorus,
+        nitrogen,
+        ph,
+        potassium,
+        temperature,
+        ambientHumidity,
+        soilMoisture,
+      }),
+    );
 
     res.json({
       data: newReading,

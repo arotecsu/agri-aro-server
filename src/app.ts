@@ -4,7 +4,7 @@ import cors from "cors";
 import { createServer } from "http";
 
 import { envService } from "./config/env";
-import { SocketService } from "./services/socket";
+import { socketService } from "./services/socket";
 import { loadRoutes } from "./routes";
 import { connectDatabase } from "./database/db";
 import { initJob } from "./services/jobs";
@@ -28,7 +28,7 @@ loadRoutes(app);
 
 const server = createServer(app);
 
-const socketService = new SocketService(server, corsConfig);
+socketService.start(server, corsConfig);
 
 initJob();
 

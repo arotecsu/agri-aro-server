@@ -183,8 +183,8 @@ class FieldsController {
     if (!field) return res.sendStatus(404);
 
     const params = await SoilCrop.findOne({
-      cropType: field.cropType,
-      soilType: field.soilType,
+      crop: field.cropType.toString(),
+      soil: field.soilType.toString(),
     });
 
     if (!params) return res.sendStatus(404);

@@ -1,4 +1,3 @@
-import { Timestamp } from "firebase-admin/firestore";
 import { culturasParams } from "../data/params";
 import { generateAlertEmail } from "../templates/emails";
 import { inInterval } from "./date";
@@ -20,32 +19,29 @@ async function verifySensParms(field_id, data) {
 
       if (user) {
         var alertas = [
-          !inInterval(data.temperatura, currentSensParams.temperatura)
+          !inInterval(data.temperature, currentSensParams.temperature)
             ? {
                 title: "Temperatura",
-                value: data.temperatura,
-                interval: currentSensParams.temperatura,
+                value: data.temperature,
+                interval: currentSensParams.temperature,
                 unit: "° C",
               }
             : null,
 
-          !inInterval(
-            data.umidade_ambiental,
-            currentSensParams.umidade_ambiental,
-          )
+          !inInterval(data.ambientHumidity, currentSensParams.ambientHumidity)
             ? {
                 title: "Umidade Ambiental",
-                value: data.umidade_ambiental,
-                interval: currentSensParams.umidade_ambiental,
+                value: data.ambientHumidity,
+                interval: currentSensParams.ambientHumidity,
                 unit: "%",
               }
             : null,
 
-          !inInterval(data.umidade_solo, currentSensParams.umidade_solo)
+          !inInterval(data.soilMoisture, currentSensParams.soilMoisture)
             ? {
                 title: "Umidade do Solo",
-                value: data.umidade_solo,
-                interval: currentSensParams.umidade_solo,
+                value: data.soilMoisture,
+                interval: currentSensParams.soilMoisture,
                 unit: "%",
               }
             : null,
@@ -59,29 +55,29 @@ async function verifySensParms(field_id, data) {
               }
             : null,
 
-          !inInterval(data.nitrogenio, currentSensParams.nitrogenio)
+          !inInterval(data.nitrogen, currentSensParams.nitrogen)
             ? {
                 title: "Nitrogênio",
-                value: data.nitrogenio,
-                interval: currentSensParams.nitrogenio,
+                value: data.nitrogen,
+                interval: currentSensParams.nitrogen,
                 unit: "mg/kg",
               }
             : null,
 
-          !inInterval(data.fosforo, currentSensParams.fosforo)
+          !inInterval(data.phosphorus, currentSensParams.phosphorus)
             ? {
                 title: "Fósforo",
-                value: data.fosforo,
-                interval: currentSensParams.fosforo,
+                value: data.phosphorus,
+                interval: currentSensParams.phosphorus,
                 unit: "mg/kg",
               }
             : null,
 
-          !inInterval(data.potassio, currentSensParams.potassio)
+          !inInterval(data.potassium, currentSensParams.potassium)
             ? {
                 title: "Potássio",
-                value: data.potassio,
-                interval: currentSensParams.potassio,
+                value: data.potassium,
+                interval: currentSensParams.potassium,
                 unit: "mg/kg",
               }
             : null,

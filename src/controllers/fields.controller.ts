@@ -197,6 +197,34 @@ class FieldsController {
       params,
     });
   }
+
+  async addDevice(req: AuthRequest, res: Response) {
+    const { fieldId } = req.params;
+    const { serieId } = req.body;
+    const { userId } = req;
+
+    const field = await Field.findById(fieldId);
+    if (!field)
+      return res.status(404).json({ message: "Campo não encontrado" });
+
+    // Verificar se o device existe
+    const device = await Device.findOne({ serieId });
+    if (!device) {
+      return res.status(404).json({ message: "Dispositivo não encontrado" });
+    }
+
+    // Associar device ao field
+    device.fieldId = fieldId;
+    device.userId = userId;
+    await device.save();
+
+    const devices = await Device.find({ fieldId });
+
+    res.json({
+      field,
+      devices,
+    });
+  }
 }
 
 export const fieldsController = new FieldsController();

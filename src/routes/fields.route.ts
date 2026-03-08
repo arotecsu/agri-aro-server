@@ -15,3 +15,5 @@ fieldsRouter.delete(
   "/:fieldId/invites/:email",
   fieldsController.removeAssociate,
 );
+
+fieldsRouter.post("/:fieldId/devices", fieldsController.addDevice);

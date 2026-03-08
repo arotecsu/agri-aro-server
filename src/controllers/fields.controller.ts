@@ -79,8 +79,11 @@ class FieldsController {
 
     if (!field) return res.status(404);
 
+    const devices = await Device.find({ fieldId });
+
     res.json({
       field,
+      devices,
     });
   }
 

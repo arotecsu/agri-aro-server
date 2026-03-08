@@ -1,20 +1,22 @@
-async function sendMail(toEmail: string, subject: string, bodyEmail: string) {
-  const response = await fetch("https://api.arotec.ao/api/enviar-email", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      to: toEmail,
-      subject: subject,
-      body: bodyEmail,
+import nodemailer from "nodemailer";
+import { envService } from "../config/env";
 
-      //  Transport Data
-      email: process.env.API_EMAIL_FROM,
-      password: process.env.API_EMAIL_PASSWORD,
-      nameRemetent: process.env.API_EMAIL_NAME,
-      emailFrom: process.env.API_EMAIL_FROM,
-    }),
+const transporter = nodemailer.createTransport({
+  host: envService.get("SMTP_HOST"),
+  port: Number(envService.get("SMTP_PORT")),
+  secure: envService.get("SMTP_PORT") == "465",
+  auth: {
+    user: envService.get("SMTP_USER"),
+    pass: envService.get("SMTP_PASSWORD"),
+  },
+});
+
+async function sendMail(toEmail: string, subject: string, bodyEmail: string) {
+  await transporter.sendMail({
+    from: `Agri Aro <${envService.get("EMAIL_FROM")}>`,
+    to: toEmail,
+    subject: subject,
+    html: bodyEmail,
   });
 }
 

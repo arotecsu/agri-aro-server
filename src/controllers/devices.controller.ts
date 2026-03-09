@@ -40,7 +40,9 @@ class DevicesController {
         $gte: new Date(minDate),
         $lte: new Date(maxDate),
       },
-    });
+    })
+      .limit(24)
+      .sort({ moment: -1 });
 
     res.json({ readings });
   };

@@ -79,6 +79,9 @@ class DevicesController {
       device._id.toString(),
       "send_data",
       JSON.stringify({
+        _id: newReading._id.toString(),
+        deviceId: device._id.toString(),
+        moment: newReading.moment.toISOString(),
         phosphorus,
         nitrogen,
         ph,

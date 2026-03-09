@@ -3,7 +3,7 @@ import { User } from "../database/models/user";
 import { passwordService } from "../auth/password";
 import { jwtService } from "../auth/jwt";
 import { sendMail } from "../services/emails";
-import { generatePasswordResetEmail } from "src/templates/emails";
+import { generatePasswordResetEmail } from "../templates/emails";
 
 export class AuthController {
   register = async (req: Request, res: Response): Promise<void> => {

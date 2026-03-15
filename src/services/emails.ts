@@ -2,9 +2,8 @@ import nodemailer from "nodemailer";
 import { envService } from "../config/env";
 
 const transporter = nodemailer.createTransport({
-  host: envService.get("SMTP_HOST"),
+  service: "gmail",
   port: Number(envService.get("SMTP_PORT")),
-  secure: envService.get("SMTP_PORT") == "465",
   auth: {
     user: envService.get("SMTP_USER"),
     pass: envService.get("SMTP_PASSWORD"),
